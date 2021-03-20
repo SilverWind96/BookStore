@@ -228,6 +228,9 @@ img.large {
   color: gray;
   font-size: 1.8rem;
 }
+.old-price.bs {
+  font-size: inherit;
+}
 .discount-percent {
   color: red;
 }
