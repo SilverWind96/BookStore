@@ -1,4 +1,4 @@
-import { addToCart } from "../actions/cartActions";
+import { addToCart, removeFromCart } from "../actions/cartActions";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MessageBox from "../components/MessageBox";
@@ -13,6 +13,7 @@ export default function CartScreen(props) {
   const { cartItems } = cart;
 
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (productId) {
       dispatch(addToCart(productId, quantity));
@@ -20,11 +21,11 @@ export default function CartScreen(props) {
   }, [dispatch, productId, quantity]);
 
   const removeFromCartHandler = (id) => {
-    //
+    dispatch(removeFromCart(id));
   };
 
   const checkoutHandler = () => {
-    props.history.push("/signin/");
+    props.history.push("/signin?redirect=shipping");
   };
 
   return (
@@ -64,7 +65,7 @@ export default function CartScreen(props) {
                   <div>
                     <button
                       type="button"
-                      onClick={removeFromCartHandler(item.product)}
+                      onClick={() => removeFromCartHandler(item.product)}
                     >
                       Delete
                     </button>
@@ -89,7 +90,7 @@ export default function CartScreen(props) {
                 type="button"
                 onClick={checkoutHandler}
                 className="primary block"
-                disabled={cartItems === 0}
+                disabled={cartItems.length === 0}
               >
                 Proceed checkout
               </button>

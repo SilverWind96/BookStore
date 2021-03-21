@@ -14,7 +14,9 @@ export const listProducts = () => async (dispatch) => {
     type: PRODUCT_LIST_REQUEST,
   });
   try {
-    const { data } = await Axios.get("http://localhost:3000/browse/book");
+    const { data } = await Axios.get(
+      "http://localhost:3000/manage/book/advanced"
+    );
     dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
   } catch (err) {
     dispatch({ type: PRODUCT_LIST_FAIL, payload: err.message });
