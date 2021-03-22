@@ -3,6 +3,7 @@ import {
   USER_SIGNIN_FAIL,
   USER_SIGNIN_REQUEST,
   USER_SIGNIN_SUCCESS,
+  USER_SIGNOUT,
 } from "../constants/userConstants";
 
 export const signin = (username, password) => async (dispatch) => {
@@ -15,8 +16,15 @@ export const signin = (username, password) => async (dispatch) => {
         password,
       }
     );
-    dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
-    localStorage.setItem("userInfo", JSON.stringify(data));
+    if (data.message.username) {
+      dispatch({ type: USER_SIGNIN_SUCCESS, payload: data.message });
+      localStorage.setItem("userInfo", JSON.stringify(data.message));
+    } else {
+      dispatch({
+        type: USER_SIGNIN_FAIL,
+        payload: data.message,
+      });
+    }
   } catch (error) {
     dispatch({
       type: USER_SIGNIN_FAIL,
@@ -26,4 +34,10 @@ export const signin = (username, password) => async (dispatch) => {
           : error.message,
     });
   }
+};
+
+export const signout = () => (dispatch) => {
+  localStorage.removeItem("userInfo");
+  localStorage.removeItem("cartItems");
+  dispatch({ type: USER_SIGNOUT });
 };

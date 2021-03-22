@@ -14,10 +14,8 @@ export const listProducts = () => async (dispatch) => {
     type: PRODUCT_LIST_REQUEST,
   });
   try {
-    const { data } = await Axios.get(
-      "http://localhost:3000/manage/book/advanced"
-    );
-    dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
+    const { data } = await Axios.get("http://localhost:3000/manage/book/");
+    dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data.message });
   } catch (err) {
     dispatch({ type: PRODUCT_LIST_FAIL, payload: err.message });
   }
@@ -26,9 +24,9 @@ export const detailsProduct = (productId) => async (dispatch) => {
   dispatch({ type: PRODUCT_DETAILS_REQUEST, payload: productId });
   try {
     const { data } = await Axios.get(
-      `http://localhost:3000/browse/book/${productId}`
+      `http://localhost:3000/manage/book/${productId}`
     );
-    dispatch({ type: PRODUCT_DETAILS_SUCCESS, payload: data[0] });
+    dispatch({ type: PRODUCT_DETAILS_SUCCESS, payload: data.message });
   } catch (error) {
     dispatch({
       type: PRODUCT_DETAILS_FAIL,

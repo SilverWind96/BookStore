@@ -1,6 +1,7 @@
 import Rating from "./Rating";
 import Discount from "./Discount";
 import { Link } from "react-router-dom";
+import CurrencyFormat from "./CurrencyFormat";
 const product = (props) => {
   const { product } = props;
   return (
@@ -15,8 +16,10 @@ const product = (props) => {
         <h3 className="author">{product.author}</h3>
         <Rating rating={product.rating} numReviews={product.numReviews} />
         <div className="price">
-          {product.price}đ{" "}
-          <span className="old-price">{product.oldPrice}đ</span>
+          <CurrencyFormat number={product.price} />{" "}
+          <span className="old-price">
+            <CurrencyFormat number={product.oldPrice} />
+          </span>
           <Discount oldPrice={product.oldPrice} price={product.price} />
         </div>
       </div>

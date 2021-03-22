@@ -5,6 +5,7 @@ import MessageBox from "../components/MessageBox";
 import { useEffect, useState } from "react";
 import { detailsProduct } from "../actions/productActions";
 import Discount from "../components/Discount";
+import CurrencyFormat from "../components/CurrencyFormat";
 
 export default function ProductScreen(props) {
   const dispatch = useDispatch();
@@ -33,35 +34,38 @@ export default function ProductScreen(props) {
             <div className="col-2">
               <img className="large" src={product.image} alt="bookImg" />
             </div>
-            <div className="col-1">
-              <ul>
-                <li>
-                  <h1>{product.title}</h1>
-                </li>
-                <li>
-                  <Rating
-                    rating={product.rating}
-                    numReviews={product.numReviews}
-                  />
-                </li>
-                <li>
-                  Price: {product.price}đ{" "}
-                  <span className="old-price bs">{product.oldPrice}đ</span>
-                  <Discount oldPrice={product.oldPrice} price={product.price} />
-                </li>
-                <li>
-                  Description:
-                  <p>{product.description}</p>
-                </li>
-              </ul>
-            </div>
-            <div className="col-1">
+
+            <div className="col-2">
               <div className="card card-body">
                 <ul>
                   <li>
+                    <h1>{product.title}</h1>
+                  </li>
+                  <li>
+                    <Rating
+                      rating={product.rating}
+                      numReviews={product.numReviews}
+                    />
+                  </li>
+                  <li>
+                    <div className="row">
+                      <div>Author</div>
+                      <div>{product.author}</div>
+                    </div>
+                  </li>
+                  <li>
                     <div className="row">
                       <div>Price</div>
-                      <div className="price">{product.price}đ </div>
+                      <div className="price">
+                        <CurrencyFormat number={product.price} />{" "}
+                        <span className="old-price">
+                          <CurrencyFormat number={product.oldPrice} />
+                        </span>
+                        <Discount
+                          oldPrice={product.oldPrice}
+                          price={product.price}
+                        />
+                      </div>
                     </div>
                   </li>
                   <li>
@@ -108,6 +112,16 @@ export default function ProductScreen(props) {
                     </>
                   )}
                 </ul>
+              </div>
+              <div className="card card-body">
+                <div className="col-1">
+                  <ul>
+                    <li>
+                      Description:
+                      <p>{product.description}</p>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>

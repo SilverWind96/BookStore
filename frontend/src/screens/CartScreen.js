@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MessageBox from "../components/MessageBox";
 import { Link } from "react-router-dom";
+import CurrencyFormat from "../components/CurrencyFormat";
 
 export default function CartScreen(props) {
   const productId = props.match.params.id;
@@ -36,7 +37,82 @@ export default function CartScreen(props) {
           <MessageBox>Cart is empty.</MessageBox>
         ) : (
           <ul>
-            {cartItems.map((item) => (
+            {/* <li>
+              <div className="row">
+                <div>a</div>
+                <div className="min-30">Name</div>
+                <div>Quantity</div>
+                <div>Price</div>
+                <div></div>
+              </div>
+            </li> */}
+            <table>
+              <thead>
+                <tr>
+                  <td>Image</td>
+                  <td>Name</td>
+                  <td>Quantity</td>
+                  <td>Price</td>
+                  <td></td>
+                </tr>
+              </thead>
+              <tbody>
+                {cartItems.map((item) => (
+                  <tr key={item.product}>
+                    <td>
+                      <div>
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className="small"
+                        />
+                      </div>
+                    </td>
+                    <td>
+                      <div className="min-30">
+                        <Link to={`/product/${item.product}`}>
+                          {item.title}
+                        </Link>
+                      </div>
+                    </td>
+                    <td>
+                      <div>
+                        <select
+                          value={item.quantity}
+                          onChange={(e) =>
+                            dispatch(
+                              addToCart(item.product, Number(e.target.value))
+                            )
+                          }
+                        >
+                          {[...Array(item.countInStock).keys()].map((x) => (
+                            <option key={x + 1} value={x + 1}>
+                              {x + 1}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </td>
+                    <td>
+                      <div>
+                        <CurrencyFormat number={item.price} />
+                      </div>
+                    </td>
+                    <td>
+                      <div>
+                        <button
+                          type="button"
+                          onClick={() => removeFromCartHandler(item.product)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {/* {cartItems.map((item) => (
               <li key={item.product}>
                 <div className="row">
                   <div>
@@ -72,7 +148,7 @@ export default function CartScreen(props) {
                   </div>
                 </div>
               </li>
-            ))}
+            ))} */}
           </ul>
         )}
       </div>
@@ -82,7 +158,15 @@ export default function CartScreen(props) {
             <li>
               <h2>
                 Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)}) items
-                : {cartItems.reduce((a, c) => a + c.quantity * c.price, 0)}
+                :{" "}
+                {
+                  <CurrencyFormat
+                    number={cartItems.reduce(
+                      (a, c) => a + c.quantity * c.price,
+                      0
+                    )}
+                  />
+                }
               </h2>
             </li>
             <li>
