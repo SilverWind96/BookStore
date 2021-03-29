@@ -32,7 +32,7 @@ export default function ProductScreen(props) {
         <div>
           <div className="row top">
             <div className="col-2">
-              <img className="large" src={product.image} alt="bookImg" />
+              <img className="large" src={product.image} alt={product.title} />
             </div>
 
             <div className="col-2">

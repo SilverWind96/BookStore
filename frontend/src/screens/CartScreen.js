@@ -37,15 +37,6 @@ export default function CartScreen(props) {
           <MessageBox>Cart is empty.</MessageBox>
         ) : (
           <ul>
-            {/* <li>
-              <div className="row">
-                <div>a</div>
-                <div className="min-30">Name</div>
-                <div>Quantity</div>
-                <div>Price</div>
-                <div></div>
-              </div>
-            </li> */}
             <table>
               <thead>
                 <tr>
@@ -53,6 +44,7 @@ export default function CartScreen(props) {
                   <td>Name</td>
                   <td>Quantity</td>
                   <td>Price</td>
+                  <td>Subtotal</td>
                   <td></td>
                 </tr>
               </thead>
@@ -99,6 +91,9 @@ export default function CartScreen(props) {
                       </div>
                     </td>
                     <td>
+                      <CurrencyFormat number={item.price * item.quantity} />
+                    </td>
+                    <td>
                       <div>
                         <button
                           type="button"
@@ -112,43 +107,6 @@ export default function CartScreen(props) {
                 ))}
               </tbody>
             </table>
-            {/* {cartItems.map((item) => (
-              <li key={item.product}>
-                <div className="row">
-                  <div>
-                    <img src={item.image} alt={item.title} className="small" />
-                  </div>
-                  <div className="min-30">
-                    <Link to={`/product/${item.product}`}>{item.title}</Link>
-                  </div>
-                  <div>
-                    <select
-                      value={item.quantity}
-                      onChange={(e) =>
-                        dispatch(
-                          addToCart(item.product, Number(e.target.value))
-                        )
-                      }
-                    >
-                      {[...Array(item.countInStock).keys()].map((x) => (
-                        <option key={x + 1} value={x + 1}>
-                          {x + 1}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>{item.price}</div>
-                  <div>
-                    <button
-                      type="button"
-                      onClick={() => removeFromCartHandler(item.product)}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              </li>
-            ))} */}
           </ul>
         )}
       </div>
@@ -157,8 +115,7 @@ export default function CartScreen(props) {
           <ul>
             <li>
               <h2>
-                Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)}) items
-                :{" "}
+                Total ({cartItems.reduce((a, c) => a + c.quantity, 0)}) items :{" "}
                 {
                   <CurrencyFormat
                     number={cartItems.reduce(

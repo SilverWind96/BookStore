@@ -337,6 +337,10 @@ img.large {
   max-width: 30rem;
 }
 
+.search {
+  width: 500px;
+}
+
 /* Search */
 .search button {
   border-radius: 0 0.5rem 0.5rem 0;
@@ -347,6 +351,7 @@ img.large {
   border-radius: 0.5rem 0 0 0.5rem;
   border-right: none;
   margin-left: 0.5rem;
+  width: 400px;
 }
 .active {
   font-weight: bold;
@@ -394,4 +399,12 @@ table {
   width: 100%;
   /* border: 1px solid black;
   border-radius: 5px; */
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
