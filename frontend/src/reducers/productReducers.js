@@ -8,9 +8,7 @@ import {
   PRODUCT_LIST_FAIL,
   PRODUCT_LIST_REQUEST,
   PRODUCT_LIST_SUCCESS,
-  PRODUCT_SEARCH_FAIL,
-  PRODUCT_SEARCH_REQUEST,
-  PRODUCT_SEARCH_SUCCESS,
+  PRODUCT_RATE_PERMISSION_SUCCESS,
 } from "../constants/productConstants";
 
 export const productListReducer = (
@@ -21,7 +19,14 @@ export const productListReducer = (
     case PRODUCT_LIST_REQUEST:
       return { loading: true };
     case PRODUCT_LIST_SUCCESS:
-      return { loading: false, products: action.payload };
+      return {
+        loading: false,
+        products: action.payload.result,
+        page: action.payload.page,
+        pageNumber: action.payload.pageNumber,
+        topRated: action.payload.topRated,
+        latest: action.payload.latest,
+      };
     case PRODUCT_LIST_FAIL:
       return { loading: false, error: action.payload };
     default:
@@ -30,16 +35,24 @@ export const productListReducer = (
 };
 
 export const productDetailsReducer = (
-  state = { product: {}, loading: true },
+  state = { product: {}, rating: [], loading: true },
   action
 ) => {
   switch (action.type) {
     case PRODUCT_DETAILS_REQUEST:
       return { loading: true };
     case PRODUCT_DETAILS_SUCCESS:
-      return { loading: false, product: action.payload };
+      return {
+        ...state,
+        loading: false,
+        product: action.payload.data,
+        rating: action.payload.data1,
+        // ratingPermission: action.payload.data2 === true ? true : false,
+      };
+    case PRODUCT_RATE_PERMISSION_SUCCESS:
+      return { ...state, ratingPermission: action.payload };
     case PRODUCT_DETAILS_FAIL:
-      return { loading: false, error: action.payload };
+      return { loading: false, error: action.payload.data };
     default:
       return state;
   }

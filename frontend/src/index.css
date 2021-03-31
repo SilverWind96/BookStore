@@ -63,6 +63,7 @@ h3 {
 }
 a {
   text-decoration: none;
+  color: #203040;
 }
 a:hover {
   color: #ff8000;
@@ -129,6 +130,19 @@ a.brand {
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+}
+.book {
+  width: 300px;
+  /* height: 490px; */
+}
+.genre:hover {
+  background-color: #203040;
+}
+.genre:hover > a {
+  color: white;
+}
+.book-content {
+  /* height: 195px; */
 }
 .row.center {
   justify-content: center;
@@ -206,7 +220,18 @@ img.medium {
 img.large {
   width: 100%;
 }
-
+.des {
+  max-width: 100%;
+}
+pre {
+  white-space: pre-wrap;
+  font: inherit;
+}
+.category {
+  font-size: 2.5rem;
+  margin: 20px auto;
+  /* font-weight: bold; */
+}
 /* Card */
 .card {
   border: 0.1rem #c0c0c0 solid;
@@ -235,12 +260,24 @@ img.large {
   color: red;
 }
 /* Rating */
+.rating1 span {
+  color: #f0c040;
+  margin: 0.1rem;
+}
 .rating span {
   color: #f0c040;
   margin: 0.1rem;
 }
 .rating span:last-child {
   color: #404040;
+}
+
+.reviews {
+  /* margin: 10px; */
+  padding: 10px;
+  /* border: 1px solid grey;
+  border-radius: 15px; */
+  /* width: 100%; */
 }
 
 /* Alert */
@@ -270,11 +307,18 @@ img.large {
   color: #20a020;
   background-color: #eeffe0;
 }
+.star:hover {
+  cursor: pointer;
+}
 /* Form */
 .form {
-  max-width: 60rem;
-  margin: 0 auto;
+  /* max-width: 60rem; */
+  /* margin: 0 auto; */
 }
+
+/* .rating-button{
+  
+} */
 .form > div {
   display: flex;
   flex-direction: column;

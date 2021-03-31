@@ -16,6 +16,11 @@ import { listProductGenres } from "./actions/productActions";
 import LoadingBox from "./components/LoadingBox";
 import MessageBox from "./components/MessageBox";
 import { useEffect, useState } from "react";
+import { getCart } from "./actions/cartActions";
+import OrderHistoryScreen from "./screens/OrderHistoryScreen";
+
+import OrderHistoryDetailScreen from "./screens/OrderHistoryDetailScreen";
+import CreateBookScreen from "./screens/CreateBookScreen";
 
 function App() {
   const cart = useSelector((state) => state.cart);
@@ -36,7 +41,10 @@ function App() {
   } = productGenreList;
   useEffect(() => {
     dispatch(listProductGenres());
-  }, [dispatch]);
+    if (userInfo) {
+      dispatch(getCart(userInfo.token, userInfo.result.username));
+    }
+  }, [dispatch, userInfo]);
 
   return (
     <BrowserRouter>
@@ -76,9 +84,14 @@ function App() {
                     <i className="fa fa-caret-down"></i>
                   </Link>
                   <ul className="dropdown-content">
-                    <Link to="/signout" onClick={signoutHandler}>
-                      Sign Out
-                    </Link>
+                    <li>
+                      <Link to="/orderHistory">Order History</Link>
+                    </li>
+                    <li>
+                      <Link to="/signout" onClick={signoutHandler}>
+                        Sign Out
+                      </Link>
+                    </li>
                   </ul>
                 </div>
               ) : (
@@ -99,13 +112,21 @@ function App() {
                 <i className="fas fa-times"></i>
               </button>
             </li>
+            <li className="genre">
+              <Link
+                to={`/search/genre/all`}
+                onClick={() => setSidebarIsOpen(false)}
+              >
+                All
+              </Link>
+            </li>
             {loadingGenres ? (
               <LoadingBox></LoadingBox>
             ) : errorGenres ? (
               <MessageBox variant="danger">{errorGenres}</MessageBox>
             ) : (
               genres.map((g) => (
-                <li key={g}>
+                <li key={g} className="genre">
                   <Link
                     to={`/search/genre/${g}`}
                     onClick={() => setSidebarIsOpen(false)}
@@ -119,6 +140,21 @@ function App() {
         </aside>
         <div className="container-80">
           <main>
+            <Route
+              path="/createBook"
+              component={CreateBookScreen}
+              exact
+            ></Route>
+            <Route
+              path="/orderHistory/:id"
+              component={OrderHistoryDetailScreen}
+              exact
+            ></Route>
+            <Route
+              path="/orderHistory"
+              component={OrderHistoryScreen}
+              exact
+            ></Route>
             <Route
               path="/search/genre/:genre/name/:name/min/:min/max/:max/rating/:rating/order/:order"
               component={SearchScreen}

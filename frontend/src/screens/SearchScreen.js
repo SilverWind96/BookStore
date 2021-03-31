@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
 import { listProducts } from "../actions/productActions";
@@ -10,14 +10,14 @@ export default function SearchScreen(props) {
   const { name = "all", genre = "all" } = useParams();
   const dispatch = useDispatch();
   const productList = useSelector((state) => state.productList);
-  const { loading, error, products } = productList;
+  const { loading, error, products, pageNumber } = productList;
   const productGenreList = useSelector((state) => state.productGenreList);
   const {
     loading: loadingGenres,
     error: errorGenres,
     genres,
   } = productGenreList;
-
+  // const [chosenGenre, setChosenGenre] = useState("all");
   useEffect(() => {
     dispatch(
       listProducts({
@@ -29,7 +29,7 @@ export default function SearchScreen(props) {
 
   const getFilterUrl = (filter) => {
     const filterGenre = filter.genre || genre;
-    const filterName = filter.name ? filter.name : name !== "all" ? name : "";
+    const filterName = filter.name ? filter.name : name;
     return `/search/genre/${filterGenre}/name/${filterName}`;
   };
 
@@ -53,6 +53,14 @@ export default function SearchScreen(props) {
             <MessageBox variant="danger">{errorGenres}</MessageBox>
           ) : (
             <ul>
+              <li>
+                <Link
+                  className={genre === "all" ? "active" : ""}
+                  to={getFilterUrl({ genre: "all" })}
+                >
+                  All
+                </Link>
+              </li>
               {genres.map((g) => (
                 <li key={g}>
                   <Link
@@ -79,6 +87,18 @@ export default function SearchScreen(props) {
               <div className="row center">
                 {products.map((product) => (
                   <Product key={product.id} product={product}></Product>
+                ))}
+              </div>
+              <div className="row center">
+                {[...Array(pageNumber).keys()].map((x) => (
+                  <button
+                    key={x + 1}
+                    onClick={(e) => {
+                      dispatch(listProducts({ page: x + 1 }));
+                    }}
+                  >
+                    {x + 1}
+                  </button>
                 ))}
               </div>
             </>

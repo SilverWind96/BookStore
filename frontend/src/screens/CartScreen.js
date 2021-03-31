@@ -1,11 +1,17 @@
-import { addToCart, removeFromCart } from "../actions/cartActions";
+import { addToCart, deleteItem } from "../actions/cartActions";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MessageBox from "../components/MessageBox";
 import { Link } from "react-router-dom";
 import CurrencyFormat from "../components/CurrencyFormat";
+import NumberInputBox from "../components/NumberInputBox";
 
 export default function CartScreen(props) {
+  const userSignin = useSelector((state) => state.userSignin);
+  const { userInfo } = userSignin;
+  if (!userInfo) {
+    props.history.push("/signin");
+  }
   const productId = props.match.params.id;
   const quantity = props.location.search
     ? Number(props.location.search.split("=")[1])
@@ -16,13 +22,14 @@ export default function CartScreen(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (productId) {
-      dispatch(addToCart(productId, quantity));
+    if (productId && userInfo) {
+      dispatch(addToCart(productId, quantity, userInfo));
     }
-  }, [dispatch, productId, quantity]);
+  }, [dispatch, productId, quantity, userInfo]);
 
   const removeFromCartHandler = (id) => {
-    dispatch(removeFromCart(id));
+    // dispatch(removeFromCart(id));
+    dispatch(deleteItem(userInfo, id));
   };
 
   const checkoutHandler = () => {
@@ -50,7 +57,7 @@ export default function CartScreen(props) {
               </thead>
               <tbody>
                 {cartItems.map((item) => (
-                  <tr key={item.product}>
+                  <tr key={item.id}>
                     <td>
                       <div>
                         <img
@@ -62,28 +69,13 @@ export default function CartScreen(props) {
                     </td>
                     <td>
                       <div className="min-30">
-                        <Link to={`/product/${item.product}`}>
+                        <Link to={`/product/${item.productId}`}>
                           {item.title}
                         </Link>
                       </div>
                     </td>
                     <td>
-                      <div>
-                        <select
-                          value={item.quantity}
-                          onChange={(e) =>
-                            dispatch(
-                              addToCart(item.product, Number(e.target.value))
-                            )
-                          }
-                        >
-                          {[...Array(item.countInStock).keys()].map((x) => (
-                            <option key={x + 1} value={x + 1}>
-                              {x + 1}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
+                      <NumberInputBox item={item} userInfo={userInfo} />
                     </td>
                     <td>
                       <div>
@@ -97,7 +89,7 @@ export default function CartScreen(props) {
                       <div>
                         <button
                           type="button"
-                          onClick={() => removeFromCartHandler(item.product)}
+                          onClick={() => removeFromCartHandler(item.id)}
                         >
                           Delete
                         </button>

@@ -4,17 +4,16 @@ import CheckoutSteps from "../components/CheckoutSteps";
 import { saveShippingAddress } from "../actions/cartActions";
 
 const ShippingAddressScreen = (props) => {
+  const cart = useSelector((state) => state.cart);
   const userSignin = useSelector((state) => state.userSignin);
 
   const { userInfo } = userSignin;
-  const cart = useSelector((state) => state.cart);
   const { shippingAddress } = cart;
   if (!userInfo) {
     props.history.push("/signin");
   }
-  const [fullName, setFullName] = useState(shippingAddress.fullName);
-  const [address, setAddress] = useState(shippingAddress.address);
-  const [phoneNumber, setphoneNumber] = useState(shippingAddress.phoneNumber);
+  const [address, setAddress] = useState("");
+  const [phoneNumber, setphoneNumber] = useState("");
   const dispatch = useDispatch();
   const submitHandler = (e) => {
     e.preventDefault();
@@ -22,7 +21,6 @@ const ShippingAddressScreen = (props) => {
     if (phoneNumber.match(phoneno)) {
       dispatch(
         saveShippingAddress({
-          fullName,
           address,
           phoneNumber,
         })
@@ -39,17 +37,6 @@ const ShippingAddressScreen = (props) => {
       <form className="form" onSubmit={submitHandler}>
         <div>
           <h1>Shipping Address</h1>
-        </div>
-        <div>
-          <label htmlFor="fullName">Full Name</label>
-          <input
-            type="text"
-            id="fullName"
-            placeholder="Enter full name"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            required
-          ></input>
         </div>
         <div>
           <label htmlFor="address">Address</label>

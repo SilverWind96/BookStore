@@ -3,28 +3,36 @@ import { useDispatch, useSelector } from "react-redux";
 import CheckoutSteps from "../components/CheckoutSteps";
 import { Link } from "react-router-dom";
 import CurrencyFormat from "..//components/CurrencyFormat";
-// import { addToCart } from "../actions/cartActions";
-import LoadingBox from "../components/LoadingBox";
-import MessageBox from "../components/MessageBox";
-import { createOrder } from "../actions/orderActions";
+import { placeOrder } from "../actions/orderActions";
 
 const PlaceOrderScreen = (props) => {
   const cart = useSelector((state) => state.cart);
+  const userSignin = useSelector((state) => state.userSignin);
+  const { userInfo } = userSignin;
   const dispatch = useDispatch();
   if (!cart.paymentMethod) {
     props.history.push("/payment");
   }
-  const orderCreate = useSelector((state) => state.orderCreate);
-  //   const { loading, success, error, order } = orderCreate;
+  const { cartItems, shippingAddress, paymentMethod } = cart;
+  const cartArray = cartItems.map((item) => item.id);
   cart.itemsPrice = cart.cartItems.reduce(
     (a, c) => a + c.quantity * c.price,
     0
   );
-  cart.shippingPrice = 40000;
-  cart.totalPrice = cart.itemsPrice + cart.shippingPrice;
+  cart.totalPrice = cart.itemsPrice;
 
   const placeOrderHandler = () => {
-    dispatch(createOrder({ ...cart, orderItems: cart.cartItems }));
+    dispatch(
+      placeOrder(
+        userInfo,
+        cartArray,
+        shippingAddress.address,
+        shippingAddress.phoneNumber,
+        paymentMethod,
+        cart.totalPrice
+      )
+    );
+    props.history.push("/orderHistory");
   };
   return (
     <div>
@@ -69,7 +77,7 @@ const PlaceOrderScreen = (props) => {
                     </thead>
                     <tbody>
                       {cart.cartItems.map((item) => (
-                        <tr key={item.product}>
+                        <tr key={item.id}>
                           <td>
                             <div>
                               <img
@@ -122,24 +130,8 @@ const PlaceOrderScreen = (props) => {
               </li>
               <li>
                 <div className="row">
-                  <div>Shipping</div>
                   <div>
-                    <CurrencyFormat number={cart.shippingPrice} />
-                  </div>
-                </div>
-              </li>
-              {/* <li>
-                <div className="row">
-                  <div>Tax</div>
-                  <div>
-                    <CurrencyFormat number={cart.taxPrice} />
-                  </div>
-                </div>
-              </li> */}
-              <li>
-                <div className="row">
-                  <div>
-                    <strong> Order Total</strong>
+                    <strong> Total</strong>
                   </div>
                   <div>
                     <strong>
@@ -158,8 +150,6 @@ const PlaceOrderScreen = (props) => {
                   Place Order
                 </button>
               </li>
-              {/* {loading && <LoadingBox></LoadingBox>}
-              {error && <MessageBox variant="danger">{error}</MessageBox>} */}
             </ul>
           </div>
         </div>

@@ -13,7 +13,7 @@ export const signin = (username, password) => async (dispatch) => {
   dispatch({ type: USER_SIGNIN_REQUEST, payload: { username, password } });
   try {
     const { data } = await Axios.post(
-      "http://localhost:3000/manage/account/login",
+      "http://localhost:3000/browse/customer/login",
       {
         username,
         password,
@@ -52,12 +52,15 @@ export const register = (username, email, name, password) => async (
 ) => {
   dispatch({ type: USER_REGISTER_REQUEST, payload: { username, password } });
   try {
-    const { data } = await Axios.post("http://localhost:3000/manage/account", {
-      username,
-      password,
-      email,
-      fullName: name,
-    });
+    const { data } = await Axios.post(
+      "http://localhost:3000/browse/customer/",
+      {
+        username,
+        password,
+        email,
+        fullName: name,
+      }
+    );
     if (data.errors) {
       dispatch({
         type: USER_REGISTER_FAIL,
