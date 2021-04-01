@@ -4,6 +4,7 @@ import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import { useDispatch, useSelector } from "react-redux";
 import { listProducts } from "../actions/productActions";
+import Carousel from "react-elastic-carousel";
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
@@ -34,9 +35,18 @@ export default function HomeScreen() {
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
         <div className="row center">
-          {latest.map((product) => (
-            <Product key={product.id} product={product} />
-          ))}
+          <Carousel>
+            <div className="row center">
+              {latest.slice(0, 4).map((product) => (
+                <Product key={product.id} product={product} />
+              ))}
+            </div>
+            <div className="row center">
+              {latest.slice(4, 8).map((product) => (
+                <Product key={product.id} product={product} />
+              ))}
+            </div>
+          </Carousel>
         </div>
       )}
       <div className="row center">
@@ -48,9 +58,18 @@ export default function HomeScreen() {
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
         <div className="row center">
-          {topRated.map((product) => (
-            <Product key={product.id} product={product} />
-          ))}
+          <Carousel>
+            <div className="row center">
+              {topRated.slice(0, 4).map((product) => (
+                <Product key={product.id} product={product} />
+              ))}
+            </div>
+            <div className="row center">
+              {topRated.slice(4, 8).map((product) => (
+                <Product key={product.id} product={product} />
+              ))}
+            </div>
+          </Carousel>
         </div>
       )}
       <div className="row center">
@@ -69,16 +88,18 @@ export default function HomeScreen() {
         </div>
       )}
       <div className="row center">
-        {[...Array(pageNumber).keys()].map((x) => (
-          <button
-            key={x + 1}
-            onClick={(e) => {
-              dispatch(listProducts({ page: x + 1 }));
-            }}
-          >
-            {x + 1}
-          </button>
-        ))}
+        {pageNumber > 1
+          ? [...Array(pageNumber).keys()].map((x) => (
+              <button
+                key={x + 1}
+                onClick={(e) => {
+                  dispatch(listProducts({ page: x + 1 }));
+                }}
+              >
+                {x + 1}
+              </button>
+            ))
+          : ""}
       </div>
     </div>
   );

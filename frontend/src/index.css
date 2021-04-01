@@ -138,6 +138,7 @@ a.brand {
 .genre:hover {
   background-color: #203040;
 }
+
 .genre:hover > a {
   color: white;
 }
@@ -259,10 +260,26 @@ pre {
 .discount-percent {
   color: red;
 }
+.rating1 {
+  color: #f0c040;
+  /* margin: 0.1rem; */
+  display: inline-block;
+}
+.btn-show {
+  border: none;
+  color: cadetblue;
+  padding: 0;
+}
+.btn-show:hover {
+  border: none;
+  color: cadetblue;
+  padding: 0;
+}
 /* Rating */
 .rating1 span {
-  color: #f0c040;
-  margin: 0.1rem;
+  /* color: #f0c040; */
+  margin-left: 0.5rem;
+  display: inline-block;
 }
 .rating span {
   color: #f0c040;
@@ -399,6 +416,8 @@ pre {
 }
 .active {
   font-weight: bold;
+  /* background-color: #203040;
+  color: white; */
 }
 
 /* Map */

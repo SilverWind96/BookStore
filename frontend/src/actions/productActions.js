@@ -30,11 +30,11 @@ export const listProducts = ({ name = "all", genre = "", page = 1 }) => async (
         : `http://localhost:3000/browse/book/page/${page}`
     );
     const data1 = await Axios.get(
-      `http://localhost:3000/browse/book/top/rating/4`
+      `http://localhost:3000/browse/book/top/rating/8`
     );
     data.message.topRated = data1.data.message;
     const data2 = await Axios.get(
-      `http://localhost:3000/browse/book/top/date/4`
+      `http://localhost:3000/browse/book/top/date/8`
     );
     data.message.latest = data2.data.message;
     dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data.message });
@@ -43,9 +43,7 @@ export const listProducts = ({ name = "all", genre = "", page = 1 }) => async (
   }
 };
 
-export const detailsProduct = (productId, userInfo, page = 1) => async (
-  dispatch
-) => {
+export const detailsProduct = (productId, page = 1) => async (dispatch) => {
   dispatch({ type: PRODUCT_DETAILS_REQUEST, payload: productId });
   try {
     const { data } = await Axios.get(
@@ -59,7 +57,7 @@ export const detailsProduct = (productId, userInfo, page = 1) => async (
         type: PRODUCT_DETAILS_SUCCESS,
         payload: {
           data: data.message[0],
-          data1: data1.data.message.result,
+          data1: data1.data.message,
         },
       });
     } else {
@@ -93,22 +91,24 @@ export const checkCanRate = (productId, userInfo) => async (dispatch) => {
   } catch (error) {}
 };
 
-export const detailsProductRating = (productId) => async (dispatch) => {
-  dispatch({ type: PRODUCT_DETAILS_REQUEST, payload: productId });
-  try {
-    const { data } = await Axios.get(
-      `http://localhost:3000/manage/rating/book/${productId}`
-    );
-  } catch (error) {
-    dispatch({
-      type: PRODUCT_DETAILS_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
-  }
-};
+// export const detailsProductRating = (productId) => async (dispatch) => {
+//   dispatch({ type: PRODUCT_DETAILS_REQUEST, payload: productId });
+//   try {
+//     const { data } = await Axios.get(
+//       `http://localhost:3000/manage/rating/book/${productId}`
+//     );
+//     console.log(data);
+//   } catch (error) {
+//     console.log(error);
+//     dispatch({
+//       type: PRODUCT_DETAILS_FAIL,
+//       payload:
+//         error.response && error.response.data.message
+//           ? error.response.data.message
+//           : error.message,
+//     });
+//   }
+// };
 
 export const listProductGenres = () => async (dispatch) => {
   dispatch({

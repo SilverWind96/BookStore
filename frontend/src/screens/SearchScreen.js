@@ -55,7 +55,7 @@ export default function SearchScreen(props) {
             <ul>
               <li>
                 <Link
-                  className={genre === "all" ? "active" : ""}
+                  className={genre === "all" ? "active " : ""}
                   to={getFilterUrl({ genre: "all" })}
                 >
                   All
@@ -90,16 +90,18 @@ export default function SearchScreen(props) {
                 ))}
               </div>
               <div className="row center">
-                {[...Array(pageNumber).keys()].map((x) => (
-                  <button
-                    key={x + 1}
-                    onClick={(e) => {
-                      dispatch(listProducts({ page: x + 1 }));
-                    }}
-                  >
-                    {x + 1}
-                  </button>
-                ))}
+                {pageNumber > 1
+                  ? [...Array(pageNumber).keys()].map((x) => (
+                      <button
+                        key={x + 1}
+                        onClick={(e) => {
+                          dispatch(listProducts({ page: x + 1 }));
+                        }}
+                      >
+                        {x + 1}
+                      </button>
+                    ))
+                  : ""}
               </div>
             </>
           )}

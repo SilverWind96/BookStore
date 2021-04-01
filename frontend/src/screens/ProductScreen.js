@@ -17,7 +17,15 @@ export default function ProductScreen(props) {
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
   const productDetails = useSelector((state) => state.productDetails);
-  const { loading, error, product, rating, ratingPermission } = productDetails;
+  const {
+    loading,
+    error,
+    product,
+    rating,
+    ratingPermission,
+    page,
+    pageNumber,
+  } = productDetails;
   const [quantity, setQuantity] = useState(1);
   const [comment, setComment] = useState("");
   // const [description, setdescription] = useState("");
@@ -25,7 +33,7 @@ export default function ProductScreen(props) {
   const [ratingPoint, setRatingPoint] = useState(0);
   const [submit, setSubmit] = useState(false);
   useEffect(() => {
-    dispatch(detailsProduct(productId, userInfo));
+    dispatch(detailsProduct(productId));
     if (userInfo) {
       dispatch(checkCanRate(productId, userInfo));
     }
@@ -137,7 +145,7 @@ export default function ProductScreen(props) {
                 <div className="col-1">
                   <ul>
                     <li>
-                      Description:
+                      <strong>Description</strong>
                       <div className="des">
                         <pre>
                           {descriptionStatus
@@ -146,6 +154,7 @@ export default function ProductScreen(props) {
                         </pre>
                         <div className="row center">
                           <button
+                            className="btn-show"
                             onClick={(e) => {
                               setdescriptionStatus(!descriptionStatus);
                             }}
@@ -265,68 +274,83 @@ export default function ProductScreen(props) {
               ? rating.map((item) => (
                   <div className="reviews" key={item.id}>
                     <strong>{item.account}</strong>
-
-                    <div className="rating1">
-                      <span>
-                        <i
-                          className={
-                            item.rating > 0.5
-                              ? "fas fa-star"
-                              : item.rating > 0
-                              ? "fas fa-star-half-alt"
-                              : "far fa-star"
-                          }
-                        ></i>
-                      </span>
-                      <span>
-                        <i
-                          className={
-                            item.rating > 1.5
-                              ? "fas fa-star"
-                              : item.rating > 1
-                              ? "fas fa-star-half-alt"
-                              : "far fa-star"
-                          }
-                        ></i>
-                      </span>
-                      <span>
-                        <i
-                          className={
-                            item.rating > 2.5
-                              ? "fas fa-star"
-                              : item.rating > 2
-                              ? "fas fa-star-half-alt"
-                              : "far fa-star"
-                          }
-                        ></i>
-                      </span>
-                      <span>
-                        <i
-                          className={
-                            item.rating > 3.5
-                              ? "fas fa-star"
-                              : item.rating > 3
-                              ? "fas fa-star-half-alt"
-                              : "far fa-star"
-                          }
-                        ></i>
-                      </span>
-                      <span>
-                        <i
-                          className={
-                            item.rating > 4.5
-                              ? "fas fa-star"
-                              : item.rating > 4
-                              ? "fas fa-star-half-alt"
-                              : "far fa-star"
-                          }
-                        ></i>
-                      </span>
-                    </div>
+                    <span>
+                      <div className="rating1">
+                        <span>
+                          <i
+                            className={
+                              item.rating > 0.5
+                                ? "fas fa-star"
+                                : item.rating > 0
+                                ? "fas fa-star-half-alt"
+                                : "far fa-star"
+                            }
+                          ></i>
+                        </span>
+                        <span>
+                          <i
+                            className={
+                              item.rating > 1.5
+                                ? "fas fa-star"
+                                : item.rating > 1
+                                ? "fas fa-star-half-alt"
+                                : "far fa-star"
+                            }
+                          ></i>
+                        </span>
+                        <span>
+                          <i
+                            className={
+                              item.rating > 2.5
+                                ? "fas fa-star"
+                                : item.rating > 2
+                                ? "fas fa-star-half-alt"
+                                : "far fa-star"
+                            }
+                          ></i>
+                        </span>
+                        <span>
+                          <i
+                            className={
+                              item.rating > 3.5
+                                ? "fas fa-star"
+                                : item.rating > 3
+                                ? "fas fa-star-half-alt"
+                                : "far fa-star"
+                            }
+                          ></i>
+                        </span>
+                        <span>
+                          <i
+                            className={
+                              item.rating > 4.5
+                                ? "fas fa-star"
+                                : item.rating > 4
+                                ? "fas fa-star-half-alt"
+                                : "far fa-star"
+                            }
+                          ></i>
+                        </span>
+                      </div>
+                    </span>
                     <p>{item.content}</p>
                   </div>
                 ))
               : ""}
+            <div className="row center">
+              {pageNumber > 1
+                ? [...Array(pageNumber).keys()].map((x) => (
+                    <button
+                      key={x + 1}
+                      onClick={(e) => {
+                        dispatch(detailsProduct(productId, page));
+                      }}
+                    >
+                      {x + 1}
+                    </button>
+                  ))
+                : ""}
+            </div>
           </div>
         </div>
       ) : (

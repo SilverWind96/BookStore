@@ -46,7 +46,9 @@ export const productDetailsReducer = (
         ...state,
         loading: false,
         product: action.payload.data,
-        rating: action.payload.data1,
+        rating: action.payload.data1.result,
+        pageNumber: action.payload.data1.pageNumber,
+        page: action.payload.data1.page,
         // ratingPermission: action.payload.data2 === true ? true : false,
       };
     case PRODUCT_RATE_PERMISSION_SUCCESS:
